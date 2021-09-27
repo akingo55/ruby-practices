@@ -37,10 +37,14 @@ unless ARGV.size == 0 || ARGV.size == 2 || ARGV.size == 4
   raise ArgumentError "please check number of ARGV."
 end
 
-if ARGV.size == 2 || ARGV.size == 4
+if ARGV.size == 2
   unless ARGV.include?("-y") || ARGV.include?("-m")
-    raise ArgumentError "invalid ARGV"
+    raise ArgumentError "invalid arguments"
   end
+elsif ARGV.size == 4
+   unless ARGV.include?("-y") && ARGV.include?("-m")
+     raise ArgumentError "invalid arguments"
+   end
 end
 
 # default value
