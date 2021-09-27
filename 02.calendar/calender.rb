@@ -67,7 +67,7 @@ month_ary = []
 week_ary = []
 count = 0
 
-# create calender
+# create calender array
 [*first.day..last.day].each do |date|
   if count == 0
     num = check_day(first_day)
