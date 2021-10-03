@@ -67,27 +67,29 @@ end
 first = Date.new(year, month, 1)
 first_day = first.strftime('%a')
 last = Date.new(year, month, -1)
+day_count = last.day - first.day + 1
 month_ary = []
 week_ary = []
 count = 0
 
 # create calender array
-[*first.day..last.day].each do |date|
+(1..day_count).each do |day|
   if count == 0
     num = check_day(first_day)
     week_ary = Array.new(num, "  ")
     count += 1
   end
 
-  date = check_number(date)
+  date = Date.new(year, month, day).strftime('%a')
+  day = check_number(day)
 
-  if week_ary.size < 7
-    week_ary << date
-    month_ary << week_ary if date == last.day
-  elsif week_ary.size == 7
+  if date == "Sun"
     month_ary << week_ary
     week_ary = []
-    week_ary << date
+    week_ary << day
+  else
+    week_ary << day
+    month_ary << week_ary if day == last.day
   end
 
 end
