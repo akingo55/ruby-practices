@@ -29,7 +29,6 @@ month = $month == nil ? Date.today.month : $month.to_i
 
 # setting variables
 first = Date.new(year, month, 1)
-first_day = first.strftime('%a')
 last = Date.new(year, month, -1)
 day_count = last.day - first.day + 1
 month_ary = []
