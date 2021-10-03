@@ -14,42 +14,20 @@ def check_number(date)
   return date
 end
 
-opt = OptionParser.new
-opt.on('-y') {|v| p v }
-opt.on('-m') {|v| p v }
-
-# check arguments
-unless ARGV.size == 0 || ARGV.size == 2 || ARGV.size == 4
-  raise ArgumentError "please check number of ARGV."
-end
-
-if ARGV.size == 2
-  unless ARGV.include?("-y") || ARGV.include?("-m")
-    raise ArgumentError "invalid arguments"
-  end
-elsif ARGV.size == 4
-   unless ARGV.include?("-y") && ARGV.include?("-m")
-     raise ArgumentError "invalid arguments"
-   end
-end
-
 # default value
 year = Date.today.year
 month = Date.today.month
 
+opt = OptionParser.new
+opt.on('-y year') { |year| $year = year}
+opt.on('-m month') { |month| $month = month}
+opt.parse!(ARGV)
+
+# default value
+year = $year == nil ? Date.today.year : $year.to_i
+month = $month == nil ? Date.today.month : $month.to_i
+
 # setting variables
-if ARGV[0] == "-y"
-  year = ARGV[1].to_i
-elsif ARGV[2] == "-y"
-  year = ARGV[3].to_i
-end
-
-if ARGV[0] == "-m"
-  month = ARGV[1].to_i
-elsif ARGV[2] == "-m"
-  month = ARGV[3].to_i
-end
-
 first = Date.new(year, month, 1)
 first_day = first.strftime('%a')
 last = Date.new(year, month, -1)
