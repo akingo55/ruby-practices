@@ -3,21 +3,7 @@ require 'date'
 require 'optparse'
 
 def check_day(day)
-  if day == "Sun"
-    num = 0
-  elsif day == "Mon"
-    num = 1
-  elsif day == "Tue"
-    num = 2
-  elsif day == "Wed"
-    num = 3
-  elsif day == "Thu"
-    num = 4
-  elsif day == "Fri"
-    num = 5
-  elsif day == "Sat"
-    num = 6
-  end
+  num = day.wday
   return num
 end
 
@@ -75,15 +61,15 @@ count = 0
 # create calender array
 (1..day_count).each do |day|
   if count == 0
-    num = check_day(first_day)
+    num = check_day(first)
     week_ary = Array.new(num, "  ")
     count += 1
   end
 
-  date = Date.new(year, month, day).strftime('%a')
+  date = Date.new(year, month, day)
   day = check_number(day)
 
-  if date == "Sun"
+  if date.strftime('%a') == "Sun" && date.day != 1
     month_ary << week_ary
     week_ary = []
     week_ary << day
