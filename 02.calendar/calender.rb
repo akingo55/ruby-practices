@@ -29,17 +29,11 @@ first = Date.new(year, month, 1)
 last = Date.new(year, month, -1)
 day_count = last.day - first.day + 1
 month_ary = []
-week_ary = []
-count = 0
+num = check_day(first)
+week_ary = Array.new(num, "  ")
 
 # create calender array
 (1..day_count).each do |day|
-  if count == 0
-    num = check_day(first)
-    week_ary = Array.new(num, "  ")
-    count += 1
-  end
-
   date = Date.new(year, month, day)
   day = check_number(day)
 
