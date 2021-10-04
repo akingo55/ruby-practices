@@ -43,10 +43,10 @@ count = 0
   date = Date.new(year, month, day)
   day = check_number(day)
 
-  if date.strftime('%a') == "Sun" && date.day != 1
+  if date.strftime('%a') == "Sat"
+    week_ary << day
     month_ary << week_ary
     week_ary = []
-    week_ary << day
   else
     week_ary << day
     month_ary << week_ary if day == last.day
