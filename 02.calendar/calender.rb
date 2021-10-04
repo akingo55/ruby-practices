@@ -14,18 +14,15 @@ def check_number(date)
   return date
 end
 
-# default value
-year = Date.today.year
-month = Date.today.month
-
+params = {}
 opt = OptionParser.new
-opt.on('-y year') { |year| $year = year}
-opt.on('-m month') { |month| $month = month}
+opt.on('-y year') { |year| params[:year] = year}
+opt.on('-m month') { |month| params[:month] = month}
 opt.parse!(ARGV)
 
 # default value
-year = $year == nil ? Date.today.year : $year.to_i
-month = $month == nil ? Date.today.month : $month.to_i
+year = params[:year] == nil ? Date.today.year : params[:year].to_i
+month = params[:month] == nil ? Date.today.month : params[:month].to_i
 
 # setting variables
 first = Date.new(year, month, 1)
