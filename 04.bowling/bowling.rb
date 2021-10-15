@@ -30,39 +30,29 @@ elsif scores.size == 12
   scores.delete_at(-1)
 end
 
-def cal_nomal_score(score)
-  score.sum
-end
-
-def cal_spare_score(score, next_score)
-  score.sum + next_score
-end
-
 final_scores = []
-count = 1
 
-scores.each do |score|
-  sum = if count >= 1 && count <= 8
+scores.each.with_index(1) do |score, i|
+  sum = if i >= 1 && i <= 8
           if score[0] == 10
-            scores[count][0] == 10 ? score.sum + scores[count][0] + scores[count + 1][0] : score.sum + scores[count][0] + scores[count][1]
+            scores[i][0] == 10 ? score.sum + scores[i][0] + scores[i + 1][0] : score.sum + scores[i][0] + scores[i][1]
           elsif score.sum == 10
-            cal_spare_score(score, scores[count][0])
+            score.sum + scores[i][0]
           else
-            cal_nomal_score(score)
+            score.sum
           end
-        elsif count == 9
+        elsif i == 9
           if score[0] == 10
-            score.sum + scores[count][0] + scores[count][1]
+            score.sum + scores[i][0] + scores[i][1]
           elsif score.sum == 10
-            cal_spare_score(score, scores[count][0])
+            score.sum + scores[i][0]
           else
-            cal_nomal_score(score)
+            score.sum
           end
         else
-          cal_nomal_score(score)
+          score.sum
         end
   final_scores << sum
-  count += 1
 end
 
 p final_scores.sum
