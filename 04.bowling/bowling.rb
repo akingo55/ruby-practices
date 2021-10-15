@@ -16,17 +16,16 @@ end
 scores = scores.each_slice(2).to_a
 
 # check last score
-if scores.size == 11
-  scores[-2] = scores[9..].flatten
+case scores.size
+when 11
+  scores[-2] = scores[9..-1].flatten
   scores.delete_at(-1)
-elsif scores.size == 12
-  last_score = scores[9..]
+when 12
+  last_score = scores[9..-1]
   last_score.flatten!.delete(0)
   scores[-3] = last_score
-  scores.delete_at(-1)
-  scores.delete_at(-1)
+  scores.slice!(-2, 2)
 end
-
 final_scores = []
 
 scores.each.with_index(1) do |score, i|
