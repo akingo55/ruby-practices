@@ -20,7 +20,9 @@ if scores.size == 11
   scores[-2] = scores[9..].flatten
   scores.delete_at(-1)
 elsif scores.size == 12
-  scores[-3] = [10, 10, 10]
+  last_score = scores[9..]
+  last_score.flatten!.delete(0)
+  scores[-3] = last_score
   scores.delete_at(-1)
   scores.delete_at(-1)
 end
