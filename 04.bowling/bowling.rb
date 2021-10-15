@@ -1,11 +1,10 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-params = ARGV[0]
-params_ary = params.split(',')
+params = ARGV[0].split(',')
 
 scores = []
-params_ary.each do |s|
+params.each do |s|
   if s == 'X'
     scores << 10
     scores << 0
@@ -17,12 +16,8 @@ end
 scores = scores.each_slice(2).to_a
 
 # check last score
-if scores.size == 11 && scores[-1].size == 1
-  scores[-2] << scores.last[0]
-  scores.delete_at(-1)
-elsif scores.size == 11 && scores[-1].size == 2
-  scores[-2] << scores[-1][0]
-  scores[-2] << scores[-1][1]
+if scores.size == 11
+  scores[-2] = scores[9..].flatten
   scores.delete_at(-1)
 elsif scores.size == 12
   scores[-3] = [10, 10, 10]
