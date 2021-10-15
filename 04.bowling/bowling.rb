@@ -4,12 +4,12 @@
 params = ARGV[0].split(',')
 
 scores = []
-params.each do |s|
-  if s == 'X'
+params.each do |param|
+  if param == 'X'
     scores << 10
     scores << 0
   else
-    scores << s.to_i
+    scores << param.to_i
   end
 end
 
