@@ -16,16 +16,15 @@ end
 scores = scores.each_slice(2).to_a
 
 # check last score
-case scores.size
-when 11
-  scores[-2] = scores[9..-1].flatten
-  scores.delete_at(-1)
-when 12
-  last_score = scores[9..-1]
-  last_score.flatten!.delete(0)
-  scores[-3] = last_score
-  scores.slice!(-2, 2)
+last_score = scores[9..-1].flat_map{|s| s.grep_v(0) }
+
+if last_score.size == 1
+  last_score << 0
+  scores = scores[0..8] + [last_score]
+else
+  scores = scores[0..8] + [last_score]
 end
+
 final_scores = []
 
 scores.each.with_index(1) do |score, i|
