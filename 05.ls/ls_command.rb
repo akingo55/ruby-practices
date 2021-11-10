@@ -19,22 +19,17 @@ end
 # 複数行に分けて標準出力する
 def output_list(list)
   max_column = 3
-  divided_list = list.each_slice(max_column).to_a
+  count = max_column
 
-  if divided_list[0].size == divided_list[-1].size || divided_list[0].size / 2.to_f <= divided_list[-1].size
-    format_list(list, max_column)
-  else
-    count = max_column
-    while count >= 1
-      count -= 1
-      divided_list = list.each_slice(count).to_a
-      next unless divided_list[0].size == divided_list[-1].size || divided_list[0].size / 2.to_f <= divided_list[-1].size
-
+  while count >= 1
+    divided_list = list.each_slice(count).to_a
+    if divided_list[0].size == divided_list[-1].size || divided_list[0].size / 2.to_f <= divided_list[-1].size
       format_list(list, max_column)
       break
     end
+    count -= 1
   end
 end
 
-file_list = file_in_current_dir
-output_list(file_list)
+files = file_in_current_dir
+output_list(files)
