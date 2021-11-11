@@ -24,7 +24,7 @@ def output_list(list)
   while count >= 1
     divided_list = list.each_slice(count).to_a
     if divided_list[0].size == divided_list[-1].size || divided_list[0].size / 2.to_f <= divided_list[-1].size
-      format_list(list, max_column)
+      format_list(list, count)
       break
     end
     count -= 1
