@@ -16,20 +16,6 @@ def format_list(list, max_column)
   sliced_list
 end
 
-# 複数行に分けて標準出力する
-def output_list(list)
-  max_column = 3
-  count = max_column
-
-  while count >= 1
-    divided_list = list.each_slice(count).to_a
-    if divided_list[0].size == divided_list[-1].size || divided_list[0].size / 2.to_f <= divided_list[-1].size
-      format_list(list, count)
-      break
-    end
-    count -= 1
-  end
-end
-
+max_column = 3
 files = file_in_current_dir
-output_list(files)
+format_list(files, max_column)
