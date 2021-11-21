@@ -8,8 +8,8 @@ opts = OptionParser.new
 opts.on('-a') { params[:a] = true }
 opts.parse!(ARGV)
 
-def file_in_current_dir(args)
-  list = if args
+def file_in_current_dir(flag)
+  list = if flag
            Dir.glob('*', File::FNM_DOTMATCH)
          else
            Dir.glob('*')
