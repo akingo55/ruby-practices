@@ -1,9 +1,19 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-# カレントディレクトリを開けて'.'から始まらないもののみ取得
-def file_in_current_dir
-  list = Dir.glob('*')
+require 'optparse'
+
+params = {}
+opts = OptionParser.new
+opts.on('-a') { params[:a] = true }
+opts.parse!(ARGV)
+
+def file_in_current_dir(option_a)
+  list = if option_a
+           Dir.glob('*', File::FNM_DOTMATCH)
+         else
+           Dir.glob('*')
+         end
   list.sort
 end
 
@@ -17,5 +27,5 @@ def format_list(list, max_column)
 end
 
 max_column = 3
-files = file_in_current_dir
+files = file_in_current_dir(params[:a])
 format_list(files, max_column)
