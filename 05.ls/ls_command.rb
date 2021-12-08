@@ -6,15 +6,17 @@ require 'optparse'
 params = {}
 opts = OptionParser.new
 opts.on('-a') { params[:a] = true }
+opts.on('-r') { params[:r] = true }
 opts.parse!(ARGV)
 
-def file_in_current_dir(option_a)
-  list = if option_a
-           Dir.glob('*', File::FNM_DOTMATCH)
-         else
-           Dir.glob('*')
-         end
-  list.sort
+def file_in_current_dir(option)
+  if option[:a]
+    Dir.glob('*', File::FNM_DOTMATCH)
+  elsif option[:r]
+    Dir.glob('*').reverse
+  else
+    Dir.glob('*')
+  end
 end
 
 def format_list(list, max_column)
@@ -27,5 +29,5 @@ def format_list(list, max_column)
 end
 
 max_column = 3
-files = file_in_current_dir(params[:a])
+files = file_in_current_dir(params)
 format_list(files, max_column)
