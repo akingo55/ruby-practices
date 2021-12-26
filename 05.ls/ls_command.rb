@@ -10,21 +10,16 @@ opts.on('-r') { params[:r] = true }
 opts.parse!(ARGV)
 
 def file_in_current_dir(option)
-  case option.size
-  when 1
-    if option[:a]
-      Dir.glob('*', File::FNM_DOTMATCH)
-    elsif option[:r]
-      Dir.glob('*').reverse
-    else
-      raise "ls: illegal option -- #{option.keys}"
-    end
-  when 2
-    raise "ls: illegal option -- #{option.keys}" unless option[:a] && option[:r]
-
+  if option[:a] && option[:r]
     Dir.glob('*', File::FNM_DOTMATCH).reverse
-  else
+  elsif option[:a]
+    Dir.glob('*', File::FNM_DOTMATCH)
+  elsif option[:r]
+    Dir.glob('*').reverse
+  elsif option.empty?
     Dir.glob('*')
+  else
+    raise "ls: illegal option -- #{option.keys}"
   end
 end
 
