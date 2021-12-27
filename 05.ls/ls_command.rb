@@ -9,18 +9,22 @@ opts.on('-a') { params[:a] = true }
 opts.on('-r') { params[:r] = true }
 opts.parse!(ARGV)
 
-def file_in_current_dir(option)
-  if option[:a] && option[:r]
-    Dir.glob('*', File::FNM_DOTMATCH).reverse
-  elsif option[:a]
-    Dir.glob('*', File::FNM_DOTMATCH)
-  elsif option[:r]
-    Dir.glob('*').reverse
-  elsif option.empty?
-    Dir.glob('*')
-  else
-    raise "ls: illegal option -- #{option.keys}"
+def file_in_current_dir(options)
+  files = Dir.glob('*')
+  return files if options.empty?
+
+  options = options.sort.to_h
+  options.each_key do |option|
+    case option
+    when :a
+      files = Dir.glob('*', File::FNM_DOTMATCH)
+    when :r
+      files = files.reverse
+    else
+      raise "ls: illegal option -- #{option}"
+    end
   end
+  files
 end
 
 def format_list(list, max_column)
