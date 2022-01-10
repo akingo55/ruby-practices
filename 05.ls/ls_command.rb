@@ -62,7 +62,7 @@ def get_file_info(files)
       stat.size,
       stat.mtime.strftime('%m'),
       stat.mtime.strftime('%d'),
-      stat.ftype == 'file' ? stat.mtime.strftime('%H %M') : stat.mtime.strftime('%Y'),
+      stat.ftype == 'file' ? stat.mtime.strftime('%H:%M') : stat.mtime.strftime('%Y'),
       file
     ]
   end
