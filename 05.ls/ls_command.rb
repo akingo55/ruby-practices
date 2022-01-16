@@ -79,13 +79,18 @@ def format_list(list, max_column)
   sliced_list
 end
 
+def format_list_for_l_option(results)
+  formatted_list = ["total #{results[0]}"]
+  results[1].each do |result|
+    formatted_list << result.join("\t")
+  end
+  formatted_list
+end
+
 if params.include?(:l)
   files = file_in_current_dir(params)
   results = get_file_info(files)
-  puts "total #{results[0]}"
-  results[1].each do |result|
-    puts result.join("\t")
-  end
+  puts format_list_for_l_option(results)
 else
   max_column = 3
   files = file_in_current_dir(params)
