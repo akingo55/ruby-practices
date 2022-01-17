@@ -84,15 +84,15 @@ def format_list_for_l_option(results)
   results[1].each do |result|
     formatted_list << result.join("\t")
   end
-  formatted_list
+  puts formatted_list
 end
 
+files = file_in_current_dir(params)
+
 if params.include?(:l)
-  files = file_in_current_dir(params)
   results = get_file_info(files)
-  puts format_list_for_l_option(results)
+  format_list_for_l_option(results)
 else
   max_column = 3
-  files = file_in_current_dir(params)
   format_list(files, max_column)
 end
