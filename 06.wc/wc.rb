@@ -47,7 +47,7 @@ def get_info_from_standard_input(params)
   if params[:l]
     puts str.size
   else
-    puts [str.size, str.size, str.join('').bytesize].join("\t")
+    puts [str.size, str.join(' ').split(' ').size, str.join('').bytesize].join("\t")
   end
 end
 
