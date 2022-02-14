@@ -2,60 +2,31 @@
 # frozen_string_literal: true
 
 require 'optparse'
-
 params = {}
 opts = OptionParser.new
 opts.on('-l') { params[:l] = true }
 opts.parse!(ARGV)
 
-def get_file_info(files, params)
-  raise 'wc: No arguments' if files.empty?
-
-  ary = []
+def exec(params)
+  inputs = File.pipe?($stdin) ? [{ str: ARGF.read, filename: nil }] : ARGV.map { |file| { str: File.read(file), filename: file } }
   total_line_count = 0
   total_size = 0
   total_bytesize = 0
 
-  files.each do |file|
-    raise "wc: #{file}: open: No such file" unless File.file?(file)
+  inputs.each do |input|
+    str = input[:str]
+    filename = input[:filename]
+    output = params[:l] ? [str.lines.count, filename] : [str.lines.count, str.split(' ').size, str.size, filename]
+    puts output.join("\t")
+    next if inputs.size <= 1
 
-    f = File.read(file)
-    data = params[:l] ? [f.lines.count, file] : [f.lines.count, f.split(' ').size, f.size, file]
-    ary << data
-    next if files.size <= 1
-
-    total_line_count += f.lines.count
-    total_size = f.split(' ').size
-    total_bytesize = f.size
+    total_line_count += str.lines.count
+    total_size = str.split(' ').size
+    total_bytesize = str.size
   end
 
   total = params[:l] ? [total_line_count, 'total'] : [total_line_count, total_size, total_bytesize, 'total']
-  ary.push(total) if files.size > 1
-  outputs_result(ary)
+  puts total.join("\t") if inputs.size > 1
 end
 
-def outputs_result(results)
-  results.each do |result|
-    puts result.join("\t")
-  end
-end
-
-def exec_wc(params)
-  if File.pipe?($stdin)
-    get_info_from_standard_input(params)
-  else
-    get_file_info(ARGV, params)
-  end
-end
-
-def get_info_from_standard_input(params)
-  str = ARGF.readlines
-
-  if params[:l]
-    puts str.size
-  else
-    puts [str.size, str.join(' ').split(' ').size, str.join('').bytesize].join("\t")
-  end
-end
-
-exec_wc(params)
+exec(params)
