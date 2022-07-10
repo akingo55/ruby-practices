@@ -3,14 +3,14 @@
 require_relative 'shot'
 require_relative 'frame'
 
-params = ARGV[0].split(',')
+marks = ARGV[0].split(',')
 
-def main(params)
+def main(marks)
   shots = []
   frames = []
 
-  params.each do |param|
-    shot = Shot.new(param)
+  marks.each do |mark|
+    shot = Shot.new(mark)
     shots << shot.score
 
     if frames.size < 10
@@ -46,4 +46,4 @@ def game_score(frames)
   game_score
 end
 
-main(params)
+main(marks)
