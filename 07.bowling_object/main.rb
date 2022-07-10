@@ -2,48 +2,48 @@
 
 require_relative 'shot'
 require_relative 'frame'
-require_relative 'game'
 
 params = ARGV[0].split(',')
-score_data = []
 
-params.each do |param|
-  shot = Shot.new(param)
-  if shot.score.instance_of?(Array)
-    score_data.push(shot.score[0], shot.score[1])
-  else
-    score_data.push(shot.score)
+def main(params)
+  shots = []
+  frames = []
+
+  params.each do |param|
+    shot = Shot.new(param)
+    shots << shot.score
+
+    if frames.size < 10
+      if shots.size == 2 || shot.score == 10
+        frames << shots.dup
+        shots.clear
+      end
+    else
+      frames.last << shot.score
+    end
   end
+
+  puts game_score(frames)
 end
 
-frame = Frame.new(score_data)
-games = []
+def game_score(frames)
+  game_score = 0
 
-i = 1
-while i <= 10
-  score = frame.score(i)
-  next_score = i == 10 ? [] : frame.score(i + 1)
-  after_next_score = i >= 9 ? [] : frame.score(i + 2)
+  frames.each.with_index(1) do |frame, index|
+    frame = Frame.new(frame)
+    next_frame_score = index == 10 ? [0] : frames[index]
+    after_next_frame_score = index >= 9 ? [0] : frames[index + 1]
+    left_frames = next_frame_score + after_next_frame_score
 
-  game = Game.new(score)
-
-  sum = if i <= 9
-          if game.strike? && i == 9
-            score.sum + next_score[0..1].sum
-          elsif game.strike? && next_score[0] == 10
-            score.sum + next_score.sum + after_next_score[0]
-          elsif game.strike?
-            score.sum + next_score.sum
-          elsif game.spare?
-            score.sum + next_score[0]
-          else
-            score.sum
-          end
-        else
-          score.sum
-        end
-  games << sum
-  i += 1
+    game_score += if frame.strike?
+                    frame.score.sum + left_frames[0] + left_frames[1]
+                  elsif frame.spare?
+                    frame.score.sum + left_frames[0]
+                  else
+                    frame.score.sum
+                  end
+  end
+  game_score
 end
 
-p games.sum
+main(params)
