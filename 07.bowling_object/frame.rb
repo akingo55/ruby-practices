@@ -1,17 +1,19 @@
 # frozen_string_literal: true
 
 class Frame
-  attr_reader :score
-
-  def initialize(score)
-    @score = score
+  def initialize(scores)
+    @scores = scores
   end
 
   def strike?
-    @score[0] == 10
+    @scores[0] == 10
   end
 
   def spare?
-    @score[0] + @score[1] == 10 && @score[0] != 10
+    @scores[0..1].sum == 10 && !strike?
+  end
+
+  def total_score
+    @scores.sum
   end
 end
