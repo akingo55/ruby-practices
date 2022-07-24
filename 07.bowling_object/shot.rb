@@ -1,14 +1,13 @@
 # frozen_string_literal: true
 
 class Shot
-  attr_reader :shot
+  attr_reader :score
 
-  def initialize(shot)
-    @shot = shot == 'X' ? 10 : shot.to_i
+  def initialize(score)
+    @score = score == 'X' ? 10 : score.to_i
   end
 
   def self.prepare(marks)
-    shots = marks.split(',')
-    shots.map { |shot| Shot.new(shot).shot }
+    marks.split(',').map { |mark| Shot.new(mark) }
   end
 end
