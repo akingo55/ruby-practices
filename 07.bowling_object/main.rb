@@ -5,35 +5,33 @@ require_relative 'frame'
 
 def main(marks)
   shots = Shot.prepare(marks)
-  frame_score = [] # a frame score
-  all_scores_per_frame = [] # all scores per each frame
+  shots_in_frame = []
+  frames = []
 
   shots.each do |shot|
-    frame_score << shot
+    shots_in_frame << shot.score
 
-    if all_scores_per_frame.size < 10
-      if frame_score.size == 2 || shot == 10
-        all_scores_per_frame << frame_score.dup
-        frame_score = []
-      end
-    else
-      all_scores_per_frame.last << shot
+    next unless frames.size < 9
+
+    if shots_in_frame.size == 2 || shot.score == 10
+      frames << Frame.new(*shots_in_frame)
+      shots_in_frame = []
     end
   end
-  puts game_score(all_scores_per_frame)
+  frames << Frame.new(*shots_in_frame)
+  puts game_score(frames)
 end
 
-def game_score(scores)
-  scores.each.with_index(1).sum do |score, index|
-    frame = Frame.new(score)
-    next_frame = index == 10 ? [0] : scores[index]
-    after_next_frame = index >= 9 ? [0] : scores[index + 1]
-    left_frames = next_frame + after_next_frame
+def game_score(frames)
+  frames.each.with_index(1).sum do |frame, index|
+    next_frame_bonus_score = index == 10 ? [0] : frames[index].bonus_score
+    after_next_frame_bonus_score = index >= 9 ? [0] : frames[index + 1].bonus_score
+    left_bonus_scores = next_frame_bonus_score + after_next_frame_bonus_score
 
     if frame.strike?
-      frame.total_score + left_frames[0..1].sum
+      frame.total_score + left_bonus_scores[0..1].sum
     elsif frame.spare?
-      frame.total_score + left_frames[0]
+      frame.total_score + left_bonus_scores[0]
     else
       frame.total_score
     end
