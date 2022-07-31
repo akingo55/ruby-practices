@@ -1,46 +1,14 @@
 # frozen_string_literal: true
 
 class Frame
-  attr_reader :first_shot, :second_shot, :third_shot
+  attr_reader :shots
 
   def initialize(first_shot, second_shot = 0, third_shot = nil)
-    @first_shot = first_shot
-    @second_shot = second_shot
-    @third_shot = third_shot
-  end
-
-  def strike?
-    @first_shot.score == 10
-  end
-
-  def strike_bonus_score(next_frame, after_next_frame)
-    if next_frame.nil?
-      0
-    elsif next_frame.strike? && !after_next_frame.nil?
-      next_frame.first_shot.score + after_next_frame.first_shot.score
-    else
-      next_frame.first_shot.score + next_frame.second_shot.score
-    end
-  end
-
-  def spare_bonus_score(next_frame)
-    next_frame.nil? ? 0 : next_frame.first_shot.score
-  end
-
-  def spare?
-    @first_shot.score + @second_shot.score == 10 && !strike?
-  end
-
-  def all_shots
-    if @third_shot.nil?
-      [@first_shot.score, @second_shot.score]
-    else
-      [@first_shot.score, @second_shot.score, @third_shot.score]
-    end
+    @shots = [first_shot, second_shot, third_shot].compact
   end
 
   def total_score(next_frame, after_next_frame)
-    total_frame_score = all_shots.sum
+    total_frame_score = @shots.sum(&:score)
 
     bonus_score = if strike?
                     strike_bonus_score(next_frame, after_next_frame)
@@ -50,5 +18,29 @@ class Frame
                     0
                   end
     total_frame_score + bonus_score
+  end
+
+  def strike?
+    @shots[0].score == 10
+  end
+
+  private
+
+  def strike_bonus_score(next_frame, after_next_frame)
+    if next_frame.nil?
+      0
+    elsif next_frame.strike? && !after_next_frame.nil?
+      next_frame.shots[0].score + after_next_frame.shots[0].score
+    else
+      next_frame.shots[0].score + next_frame.shots[1].score
+    end
+  end
+
+  def spare_bonus_score(next_frame)
+    next_frame.nil? ? 0 : next_frame.shots[0].score
+  end
+
+  def spare?
+    @shots[0].score + @shots[1].score == 10 && !strike?
   end
 end
