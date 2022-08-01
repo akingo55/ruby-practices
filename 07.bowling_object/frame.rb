@@ -3,7 +3,7 @@
 class Frame
   attr_reader :shots
 
-  def initialize(first_shot, second_shot = 0, third_shot = nil)
+  def initialize(first_shot, second_shot, third_shot = nil)
     @shots = [first_shot, second_shot, third_shot].compact
   end
 
@@ -21,7 +21,7 @@ class Frame
   end
 
   def strike?
-    @shots[0].score == 10
+    @shots[0].strike?
   end
 
   private
@@ -32,7 +32,7 @@ class Frame
     elsif next_frame.strike? && !after_next_frame.nil?
       next_frame.shots[0].score + after_next_frame.shots[0].score
     else
-      next_frame.shots[0].score + next_frame.shots[1].score
+      next_frame.shots[0..1].sum(&:score)
     end
   end
 
@@ -41,6 +41,6 @@ class Frame
   end
 
   def spare?
-    @shots[0].score + @shots[1].score == 10 && !strike?
+    @shots[0..1].sum(&:score) == 10 && !strike?
   end
 end
