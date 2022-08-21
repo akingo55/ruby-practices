@@ -2,6 +2,28 @@
 
 require 'etc'
 
+TYPES = {
+  'file' => '-',
+  'directory' => 'd',
+  'characterSpecial' => 'c',
+  'blockSpecial' => 'b',
+  'fifo' => 'p',
+  'link' => 'l',
+  'socket' => 's',
+  'unknown' => '?'
+}.freeze
+
+PERMISSIONS = {
+  7 => 'rwx',
+  6 => 'rw-',
+  5 => 'r-x',
+  4 => 'r--',
+  3 => '-wx',
+  2 => '-w-',
+  1 => '--x',
+  0 => '---'
+}.freeze
+
 class File::Stat
   def details
     [
@@ -19,36 +41,11 @@ class File::Stat
   private
 
   def converted_ftype
-    types = {
-      'file' => '-',
-      'directory' => 'd',
-      'characterSpecial' => 'c',
-      'blockSpecial' => 'b',
-      'fifo' => 'p',
-      'link' => 'l',
-      'socket' => 's',
-      'unknown' => '?'
-    }
-    types[ftype]
+    TYPES[ftype]
   end
 
   def converted_permission
-    permissions = {
-      7 => 'rwx',
-      6 => 'rw-',
-      5 => 'r-x',
-      4 => 'r--',
-      3 => '-wx',
-      2 => '-w-',
-      1 => '--x',
-      0 => '---'
-    }
-
     numbers = mode.to_s(8)[-3..].split('').map(&:to_i)
-    permission = ''
-    numbers.each do |number|
-      permission += permissions[number]
-    end
-    permission
+    numbers.map { |number| PERMISSIONS[number] }.join
   end
 end

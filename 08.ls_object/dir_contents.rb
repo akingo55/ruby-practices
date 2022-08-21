@@ -25,19 +25,14 @@ class DirContents
   private
 
   def formated_files_with_details
-    all_files_details = []
-    matched_files.each do |file|
+    matched_files.map do |file|
       file_stat_details = File::Stat.new(file).details << file
-      all_files_details << file_stat_details.join("\t")
+      file_stat_details.join("\t")
     end
-    all_files_details
   end
 
   def total_blocks
-    matched_files.each.sum do |file|
-      file_stat = File::Stat.new(file)
-      file_stat.blocks
-    end
+    matched_files.each.sum { |file| File::Stat.new(file).blocks }
   end
 
   def matched_files
@@ -56,10 +51,6 @@ class DirContents
 
     splited_files.map! { |x| x.values_at(0..max_size) }
 
-    formated_files = []
-    splited_files.transpose.each do |file|
-      formated_files << file.join("\t")
-    end
-    formated_files
+    splited_files.transpose.map { |file| file.join("\t") }
   end
 end
